@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 Code,Name of Local Government Area of residence,Quality indicator*,Number,obese_rate,"ASR per 100
+=======
+lga_code,lga_name,Quality indicator*,Number,obese_rate,"ASR per 100
+>>>>>>> e82b3b5 (updated datas)
 - lower 95% C.I.","ASR per 100
 - upper 95% C.I.",SR,"SR
 - lower 95% C.I.","SR
