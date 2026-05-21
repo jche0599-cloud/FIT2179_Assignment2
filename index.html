@@ -1,55 +1,167 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>FIT2179 Assignment 2 - Visualization</title>
+  <meta charset="UTF-8">
+  <title>Victoria Health Inequality Report</title>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-  
   <style>
-    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    #vis { border: 1px solid #ccc; padding: 10px; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 950px; margin: 0 auto; padding: 40px; background: #f4f7f6; }
+    .header { text-align: center; margin-bottom: 50px; }
+    .chart-section { background: white; padding: 40px; margin-bottom: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; font-size: 2.5em; }
+    h2 { color: #2980b9; margin-top: 0; }
+    p { font-size: 1.1em; color: #555; }
+    .vega-embed { width: 100%; display: flex; justify-content: center; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-  <h1>Socio-Economic Status vs Adult Obesity Rates</h1>
-  <div id="vis"></div>
+  <div class="header">
+    <h1>Health Inequality in Victoria</h1>
+    <p>A socio-economic analysis of the relationship between SEIFA index and adult obesity rates.</p>
+  </div>
+
+  <div class="chart-section">
+    <h2>1. The Wealth-Health Gradient</h2>
+    <p>The following scatter plot illustrates the correlation between socio-economic advantage (SEIFA) and obesity. A visible downward trend confirms that regions with higher economic advantage generally report lower rates of obesity.</p>
+    <div id="scatter-chart"></div>
+  </div>
+
+  <div class="chart-section">
+    <h2>2. High-Burden Regions</h2>
+    <p>These Local Government Areas (LGAs) represent the regions with the highest recorded obesity rates. These areas may require targeted public health intervention and resource allocation.</p>
+    <div id="bar-top10"></div>
+  </div>
+
+  <div class="chart-section">
+    <h2>3. Distribution of Economic Advantage</h2>
+    <p>This histogram shows the distribution of SEIFA scores across Victoria. It highlights that the majority of regions cluster within a specific range of economic status.</p>
+    <div id="hist-seifa"></div>
+  </div>
+
+  <div class="chart-section">
+    <h2>4. Health Outcomes by Economic Decile</h2>
+    <p>When grouping regions by their economic decile, a "health gradient" emerges. The data shows that health outcomes are structural, not just individual, following clear economic strata.</p>
+    <div id="bar-decile"></div>
+  </div>
+
+  <div class="chart-section">
+    <h2>5. Population Density and Obesity Risk</h2>
+    <p>This visualization maps the obesity rate against the number of residents. It helps identify if high-density populations face a higher obesity risk compared to smaller, rural communities.</p>
+    <div id="bubble-pop"></div>
+  </div>
 
   <script>
-    const spec = {
+    const baseUrl = "https://raw.githubusercontent.com/jche0599-cloud/FIT2179_Assignment2/main/";
+    
+  
+    const commonData = {
+      "obesity": { "url": baseUrl + "obesity_data.csv", "format": {"type": "csv", "parse": {"lga_code": "number"}} },
+      "seifa": { "url": baseUrl + "seifa_data.csv", "format": {"type": "csv", "parse": {"lga_code": "number"}} }
+    };
+
+ 
+    const specScatter = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 600, "height": 300,
+      "data": commonData.obesity,
+      "transform": [
+        { "lookup": "lga_code", "from": { "data": commonData.seifa, "key": "lga_code", "fields": ["Score"] } },
+        { "filter": "datum.Score != null" }
+      ],
+      "mark": {"type": "circle", "size": 60, "color": "#3498db"},
+      "encoding": {
+        "x": {"field": "Score", "type": "quantitative", "title": "SEIFA Index (Advantage)"},
+        "y": {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"},
+        "tooltip": [{"field": "lga_name", "type": "nominal"}, {"field": "Score", "type": "quantitative"}, {"field": "obese_rate", "type": "quantitative"}]
+      }
+    };
+
+
+    const specBar10 = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "width": 600,
-      "height": 400,
-      "data": {
-        "url": "https://raw.githubusercontent.com/jche0599-cloud/FIT2179_Assignment2/main/obesity_data.csv"
-      },
+      "height": 350,
+      "data": commonData.obesity,
       "transform": [
-        {
-          "lookup": "lga_code",
-          "from": {
-            "data": {
-              "url": "https://raw.githubusercontent.com/jche0599-cloud/FIT2179_Assignment2/main/seifa_data.csv"
-            },
-            "key": "lga_code",
-            "fields": ["Score"]
+        {"window": [{"op": "rank", "as": "rank"}], "sort": [{"field": "obese_rate", "order": "descending"}]},
+        {"filter": "datum.rank <= 10"} 
+      ],
+      "mark": {
+        "type": "bar", 
+        "color": "#e74c3c", 
+        "cornerRadiusEnd": 4 
+      },
+      "encoding": {
+        "x": {
+          "field": "obese_rate", 
+          "type": "quantitative", 
+          "title": "Obesity Rate (%)"
+        },
+        "y": {
+          "field": "lga_name", 
+          "type": "nominal", 
+          "sort": "-x", 
+          "title": null,
+          "axis": {
+            "labelLimit": 200, 
+            "labelFontSize": 12
           }
         },
-        {"filter": "datum.Score != null && datum.obese_rate != null"}
-      ],
-      "mark": {"type": "circle", "filled": true, "size": 80, "color": "steelblue", "opacity": 0.6},
-      "encoding": {
-        "x": {"field": "Score", "type": "quantitative", "title": "SEIFA Score (Advantaged)"},
-        "y": {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"},
         "tooltip": [
           {"field": "lga_name", "type": "nominal", "title": "LGA Name"},
-          {"field": "Score", "type": "quantitative", "title": "SEIFA Score"},
           {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"}
         ]
       }
     };
-    
-    vegaEmbed('#vis', spec).catch(console.error);
+
+
+    const specHist = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 600, "height": 300,
+      "data": commonData.seifa,
+      "mark": {"type": "bar", "color": "#2ecc71"},
+      "encoding": {
+        "x": {"field": "Score", "bin": true, "title": "SEIFA Score Range"},
+        "y": {"aggregate": "count", "title": "Number of LGAs"}
+      }
+    };
+
+
+    const specDecile = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 600, "height": 300,
+      "data": commonData.obesity,
+      "transform": [
+        { "lookup": "lga_code", "from": { "data": commonData.seifa, "key": "lga_code", "fields": ["Decile"] } }
+      ],
+      "mark": {"type": "boxplot", "extent": "min-max"},
+      "encoding": {
+        "x": {"field": "Decile", "type": "ordinal", "title": "SEIFA Economic Decile (1=Poor, 10=Rich)"},
+        "y": {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"}
+      }
+    };
+
+    const specBubble = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": 600, "height": 300,
+      "data": commonData.obesity,
+      "mark": {"type": "circle", "color": "#f1c40f", "opacity": 0.6},
+      "encoding": {
+        "x": {"field": "lga_code", "type": "nominal", "axis": null},
+        "y": {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"},
+        "size": {"field": "Number", "type": "quantitative", "title": "Population Size"}
+      }
+    };
+
+
+    vegaEmbed('#scatter-chart', specScatter);
+    vegaEmbed('#bar-top10', specBar10);
+    vegaEmbed('#hist-seifa', specHist);
+    vegaEmbed('#bar-decile', specDecile);
+    vegaEmbed('#bubble-pop', specBubble);
   </script>
 </body>
 </html>
