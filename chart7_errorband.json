@@ -1,0 +1,104 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Correlation and Trend: SEIFA Score vs Obesity Rate",
+    "fontSize": 16,
+    "anchor": "middle"
+  },
+  "width": 600,
+  "height": 400,
+  "data": {
+    "url": "obesity_data.csv"
+  },
+  "transform": [
+    {
+      "calculate": "toNumber(datum.lga_code)",
+      "as": "lga_code_num"
+    },
+    {
+      "lookup": "lga_code_num",
+      "from": {
+        "data": {
+          "url": "seifa_data.csv"
+        },
+        "key": "lga_code",
+        "fields": ["Score", "2021 Local Government Area (LGA) Name"]
+      }
+    },
+    {
+      "filter": "datum.Score != null && datum.obese_rate != null"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "size": 70,
+        "opacity": 0.6,
+        "stroke": "black",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "x": {
+          "field": "Score",
+          "type": "quantitative",
+          "title": "SEIFA Advantage Score",
+          "scale": {"zero": false}
+        },
+        "y": {
+          "field": "obese_rate",
+          "type": "quantitative",
+          "title": "Obesity Rate (%)",
+          "scale": {"zero": false}
+        },
+        "color": {
+          "field": "Score",
+          "type": "quantitative",
+          "scale": {"scheme": "yellowgreenblue"},
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "2021 Local Government Area (LGA) Name",
+            "type": "nominal",
+            "title": "LGA Name"
+          },
+          {
+            "field": "Score",
+            "type": "quantitative",
+            "title": "SEIFA Score"
+          },
+          {
+            "field": "obese_rate",
+            "type": "quantitative",
+            "title": "Obesity Rate (%)"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "regression": "obese_rate",
+          "on": "Score"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "color": "#c0392b",
+        "strokeWidth": 3,
+        "strokeDash": [4, 4]
+      },
+      "encoding": {
+        "x": {
+          "field": "Score",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "obese_rate",
+          "type": "quantitative"
+        }
+      }
+    }
+  ]
+}

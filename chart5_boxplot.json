@@ -1,0 +1,46 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Obesity Rate Distribution across SEIFA Deciles",
+    "fontSize": 16,
+    "anchor": "middle"
+  },
+  "width": 600,
+  "height": 350,
+  "data": {
+    "url": "obesity_data.csv"
+  },
+  "transform": [
+    {
+      "lookup": "lga_code",
+      "from": {
+        "data": {
+          "url": "seifa_data.csv"
+        },
+        "key": "lga_code",
+        "fields": ["Decile"]
+      }
+    },
+    {
+      "filter": "datum.Decile != null"
+    }
+  ],
+  "mark": {
+    "type": "boxplot",
+    "extent": "min-max",
+    "color": "#2c3e50"
+  },
+  "encoding": {
+    "x": {
+      "field": "Decile",
+      "type": "ordinal",
+      "title": "Socio-Economic Decile (1 = Most Disadvantaged, 10 = Most Advantaged)"
+    },
+    "y": {
+      "field": "obese_rate",
+      "type": "quantitative",
+      "title": "Obesity Rate (%)",
+      "scale": {"zero": false}
+    }
+  }
+}

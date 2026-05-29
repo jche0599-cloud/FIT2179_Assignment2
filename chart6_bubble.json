@@ -1,0 +1,66 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Impact of Population Size on Obesity Rates",
+    "fontSize": 16,
+    "anchor": "middle"
+  },
+  "width": 600,
+  "height": 400,
+  "data": {
+    "url": "obesity_data.csv"
+  },
+  "transform": [
+    {
+      "lookup": "lga_code",
+      "from": {
+        "data": {
+          "url": "seifa_data.csv"
+        },
+        "key": "lga_code",
+        "fields": ["Score", "Usual Resident Population"]
+      }
+    },
+    {
+      "filter": "datum.Score != null && datum['Usual Resident Population'] != null && datum['Usual Resident Population'] > 0"
+    }
+  ],
+  "mark": {
+    "type": "circle",
+    "opacity": 0.8,
+    "stroke": "black",
+    "strokeWidth": 0.5
+  },
+  "encoding": {
+    "x": {
+      "field": "Usual Resident Population",
+      "type": "quantitative",
+      "title": "Population Size (Log Scale)",
+      "scale": {"type": "log"}
+    },
+    "y": {
+      "field": "obese_rate",
+      "type": "quantitative",
+      "title": "Obesity Rate (%)",
+      "scale": {"zero": false}
+    },
+    "size": {
+      "field": "Score",
+      "type": "quantitative",
+      "title": "SEIFA Score",
+      "scale": {"range": [30, 800]}
+    },
+    "color": {
+      "field": "Score",
+      "type": "quantitative",
+      "scale": {"scheme": "viridis"},
+      "title": "SEIFA Score"
+    },
+    "tooltip": [
+      {"field": "lga_name", "type": "nominal", "title": "LGA"},
+      {"field": "Usual Resident Population", "type": "quantitative", "title": "Population"},
+      {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"},
+      {"field": "Score", "type": "quantitative", "title": "SEIFA Score"}
+    ]
+  }
+}

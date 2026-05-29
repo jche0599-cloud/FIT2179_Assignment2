@@ -1,0 +1,64 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Density of LGA Obesity Rates by Economic Tier",
+    "fontSize": 16,
+    "anchor": "middle"
+  },
+  "width": 600,
+  "height": 250,
+  "data": {
+    "url": "obesity_data.csv"
+  },
+  "transform": [
+    {
+      "lookup": "lga_code",
+      "from": {
+        "data": {
+          "url": "seifa_data.csv"
+        },
+        "key": "lga_code",
+        "fields": ["Score"]
+      }
+    },
+    {
+      "filter": "datum.Score != null"
+    },
+    {
+      "calculate": "datum.Score >= 1000 ? '1. High Advantage' : (datum.Score <= 950 ? '3. Disadvantaged' : '2. Medium')",
+      "as": "SocioEconomic_Tier"
+    }
+  ],
+  "mark": {
+    "type": "tick",
+    "thickness": 2,
+    "height": 40
+  },
+  "encoding": {
+    "x": {
+      "field": "obese_rate",
+      "type": "quantitative",
+      "title": "Obesity Rate (%)",
+      "scale": {"zero": false}
+    },
+    "y": {
+      "field": "SocioEconomic_Tier",
+      "type": "nominal",
+      "title": "SEIFA Economic Tier"
+    },
+    "color": {
+      "field": "SocioEconomic_Tier",
+      "type": "nominal",
+      "scale": {
+        "domain": ["1. High Advantage", "2. Medium", "3. Disadvantaged"],
+        "range": ["#27ae60", "#f1c40f", "#e74c3c"]
+      },
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "lga_name", "type": "nominal", "title": "LGA"},
+      {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"},
+      {"field": "Score", "type": "quantitative", "title": "SEIFA Score"}
+    ]
+  }
+}

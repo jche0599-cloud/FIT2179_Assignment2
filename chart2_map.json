@@ -1,0 +1,113 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Victoria Local Government Areas: SEIFA Score vs Obesity Rate",
+    "fontSize": 18,
+    "anchor": "middle",
+    "offset": 20
+  },
+  "data": {
+    "url": "vic_lga.json",
+    "format": {
+      "type": "topojson",
+      "feature": "vic_lga"
+    }
+  },
+  "transform": [
+    {
+      "lookup": "properties.LGA_NAME25",
+      "from": {
+        "data": {
+          "url": "vic_seifa_obesity.csv"
+        },
+        "key": "lga_name",
+        "fields": ["obese_rate", "seifa_score"]
+      }
+    }
+  ],
+  "hconcat": [
+    {
+      "width": 400,
+      "height": 320,
+      "title": "SEIFA Score (Socio-Economic Index)",
+      "projection": {
+        "type": "mercator"
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "color": {
+          "field": "seifa_score",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "yellowgreenblue"
+          },
+          "title": "SEIFA Score"
+        },
+        "tooltip": [
+          {
+            "field": "properties.LGA_NAME25",
+            "type": "nominal",
+            "title": "LGA Name"
+          },
+          {
+            "field": "seifa_score",
+            "type": "quantitative",
+            "title": "SEIFA Score"
+          }
+        ]
+      }
+    },
+    {
+      "width": 400,
+      "height": 320,
+      "title": "Obesity Rate (%)",
+      "projection": {
+        "type": "mercator"
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "color": {
+          "field": "obese_rate",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "oranges"
+          },
+          "title": "Obesity Rate (%)"
+        },
+        "tooltip": [
+          {
+            "field": "properties.LGA_NAME25",
+            "type": "nominal",
+            "title": "LGA Name"
+          },
+          {
+            "field": "obese_rate",
+            "type": "quantitative",
+            "title": "Obesity Rate (%)"
+          }
+        ]
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": "transparent"
+    },
+    "concat": {
+      "spacing": 30
+    }
+  }
+}

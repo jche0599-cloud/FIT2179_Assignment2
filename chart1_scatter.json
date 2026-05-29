@@ -1,0 +1,55 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Average Obesity Rate by SEIFA Score Bracket",
+    "fontSize": 16,
+    "anchor": "middle"
+  },
+  "width": 600,
+  "height": 350,
+  "data": {
+    "url": "obesity_data.csv"
+  },
+  "transform": [
+    {
+      "calculate": "toNumber(datum.lga_code)",
+      "as": "lga_code_num"
+    },
+    {
+      "lookup": "lga_code_num",
+      "from": {
+        "data": {
+          "url": "seifa_data.csv"
+        },
+        "key": "lga_code",
+        "fields": ["Score"]
+      }
+    },
+    {
+      "filter": "datum.Score != null && datum.obese_rate != null"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "color": "#3498db",
+    "cornerRadiusEnd": 4
+  },
+  "encoding": {
+    "x": {
+      "field": "Score",
+      "bin": {"maxbins": 10},
+      "type": "quantitative",
+      "title": "SEIFA Index Bracket (Lower = Disadvantaged)"
+    },
+    "y": {
+      "aggregate": "mean",
+      "field": "obese_rate",
+      "type": "quantitative",
+      "title": "Average Obesity Rate (%)"
+    },
+    "tooltip": [
+      {"field": "Score", "bin": true, "title": "SEIFA Bracket"},
+      {"aggregate": "mean", "field": "obese_rate", "type": "quantitative", "title": "Avg Obesity Rate (%)", "format": ".1f"}
+    ]
+  }
+}

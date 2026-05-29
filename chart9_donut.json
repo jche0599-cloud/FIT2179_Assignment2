@@ -1,0 +1,53 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Population Distribution by Socio-Economic Tier",
+    "fontSize": 16,
+    "anchor": "middle"
+  },
+  "width": 400,
+  "height": 400,
+  "data": {
+    "url": "seifa_data.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.Score != null && datum['Usual Resident Population'] != null"
+    },
+    {
+      "calculate": "datum.Score >= 1000 ? '1. High Advantage' : (datum.Score <= 950 ? '3. Low / Disadvantaged' : '2. Medium Advantage')",
+      "as": "SocioEconomic_Tier"
+    }
+  ],
+  "mark": {
+    "type": "arc",
+    "innerRadius": 80,
+    "stroke": "white",
+    "strokeWidth": 2
+  },
+  "encoding": {
+    "theta": {
+      "field": "Usual Resident Population",
+      "type": "quantitative",
+      "aggregate": "sum"
+    },
+    "color": {
+      "field": "SocioEconomic_Tier",
+      "type": "nominal",
+      "scale": {
+        "domain": ["1. High Advantage", "2. Medium Advantage", "3. Low / Disadvantaged"],
+        "range": ["#27ae60", "#f1c40f", "#e74c3c"]
+      },
+      "title": "SEIFA Tier",
+      "legend": {
+        "orient": "bottom",
+        "titleFontSize": 13,
+        "labelFontSize": 12
+      }
+    },
+    "tooltip": [
+      {"field": "SocioEconomic_Tier", "type": "nominal", "title": "Economic Tier"},
+      {"field": "Usual Resident Population", "aggregate": "sum", "type": "quantitative", "title": "Total Population", "format": ","}
+    ]
+  }
+}

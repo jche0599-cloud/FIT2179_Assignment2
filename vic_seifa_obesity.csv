@@ -1,0 +1,81 @@
+lga_code,lga_name,seifa_score,obese_rate
+20110.0,Alpine,1028.0,10.3
+20260.0,Ararat,955.0,12.7
+20570.0,Ballarat,986.0,13.8
+20660.0,Banyule,1058.0,9.7
+20740.0,Bass Coast,993.0,11.6
+20830.0,Baw Baw,1003.0,10.7
+20910.0,Bayside (Vic.),1090.0,7.1
+21010.0,Benalla,968.0,12.3
+21110.0,Boroondara,1090.0,8.5
+21180.0,Brimbank,912.0,11.5
+21270.0,Buloke,975.0,10.8
+21370.0,Campaspe,965.0,11.8
+21450.0,Cardinia,1021.0,10.4
+21610.0,Casey,995.0,11.0
+21670.0,Central Goldfields,898.0,14.4
+21750.0,Colac Otway,973.0,10.9
+21830.0,Corangamite,985.0,10.3
+21890.0,Darebin,1018.0,12.2
+22110.0,East Gippsland,963.0,12.0
+22170.0,Frankston,1003.0,12.1
+22250.0,Gannawarra,952.0,11.3
+22310.0,Glen Eira,1075.0,9.2
+22410.0,Glenelg,952.0,11.5
+22490.0,Golden Plains,1040.0,10.1
+22620.0,Greater Bendigo,985.0,12.9
+22670.0,Greater Dandenong,887.0,11.5
+22750.0,Greater Geelong,1007.0,12.1
+22830.0,Greater Shepparton,944.0,12.7
+22910.0,Hepburn,1006.0,10.4
+22980.0,Hindmarsh,940.0,11.5
+23110.0,Hobsons Bay,1021.0,9.8
+23190.0,Horsham,990.0,11.6
+23270.0,Hume,941.0,11.3
+23350.0,Indigo,1029.0,9.9
+23430.0,Kingston (Vic.),1044.0,9.2
+23670.0,Knox,1042.0,9.6
+23810.0,Latrobe (Vic.),931.0,13.7
+23940.0,Loddon,948.0,11.5
+24130.0,Macedon Ranges,1063.0,8.5
+24210.0,Manningham,1056.0,8.0
+24250.0,Mansfield,1028.0,9.9
+24330.0,Maribyrnong,1010.0,12.1
+24410.0,Maroondah,1041.0,9.8
+24600.0,Melbourne,1017.0,12.7
+24650.0,Melton,985.0,11.5
+24780.0,Mildura,940.0,12.8
+24850.0,Mitchell,1000.0,11.1
+24900.0,Moira,958.0,12.3
+24970.0,Monash,1042.0,10.0
+25060.0,Moonee Valley,1041.0,9.8
+25150.0,Moorabool,1017.0,10.2
+25250.0,Moreland,1027.0,12.7
+25340.0,Mornington Peninsula,1038.0,9.7
+25430.0,Mount Alexander,1007.0,10.6
+25490.0,Moyne,1029.0,9.6
+25620.0,Murrindindi,1005.0,10.2
+25710.0,Nillumbik,1093.0,7.4
+25810.0,Northern Grampians,951.0,11.9
+25900.0,Port Phillip,1061.0,10.9
+25990.0,Pyrenees,959.0,13.9
+26080.0,Queenscliffe,1082.0,9.4
+26170.0,South Gippsland,1003.0,10.6
+26260.0,Southern Grampians,994.0,11.0
+26350.0,Stonnington,1084.0,10.3
+26430.0,Strathbogie,982.0,11.0
+26490.0,Surf Coast,1086.0,8.9
+26610.0,Swan Hill,941.0,11.9
+26670.0,Towong,1001.0,10.2
+26700.0,Wangaratta,988.0,11.6
+26730.0,Warrnambool,995.0,11.9
+26810.0,Wellington,973.0,11.6
+26890.0,West Wimmera,991.0,11.6
+26980.0,Whitehorse,1043.0,9.5
+27070.0,Whittlesea,990.0,10.9
+27170.0,Wodonga,973.0,12.9
+27260.0,Wyndham,1006.0,10.9
+27350.0,Yarra,1046.0,12.8
+27450.0,Yarra Ranges,1041.0,9.5
+27630.0,Yarriambiack,946.0,11.9
+29399.0,Unincorporated Vic,1012.0,..

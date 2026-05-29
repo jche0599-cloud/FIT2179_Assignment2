@@ -1,0 +1,89 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Radial View: Top 15 LGAs with Highest Obesity Rates",
+    "fontSize": 16,
+    "anchor": "middle",
+    "offset": 20
+  },
+  "width": 600,
+  "height": 500,
+  "data": {
+    "url": "obesity_data.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.obese_rate != null && datum.lga_name != null"
+    },
+    {
+      "window": [{"op": "rank", "as": "obesity_rank"}],
+      "sort": [{"field": "obese_rate", "order": "descending"}]
+    },
+    {
+      "filter": "datum.obesity_rank <= 15"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "innerRadius": 50,
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "theta": {
+          "field": "obese_rate",
+          "type": "quantitative",
+          "stack": true
+        },
+        "radius": {
+          "field": "obese_rate",
+          "type": "quantitative",
+          "scale": {"type": "sqrt", "zero": true, "rangeMin": 50}
+        },
+        "color": {
+          "field": "obese_rate",
+          "type": "quantitative",
+          "scale": {"scheme": "oranges"},
+          "legend": {
+            "title": "Obesity Rate (%)",
+            "orient": "bottom"
+          }
+        },
+        "tooltip": [
+          {"field": "obesity_rank", "type": "quantitative", "title": "Rank"},
+          {"field": "lga_name", "type": "nominal", "title": "LGA Name"},
+          {"field": "obese_rate", "type": "quantitative", "title": "Obesity Rate (%)"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radiusOffset": 25,
+        "fontSize": 12,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "theta": {
+          "field": "obese_rate",
+          "type": "quantitative",
+          "stack": true
+        },
+        "radius": {
+          "field": "obese_rate",
+          "type": "quantitative",
+          "scale": {"type": "sqrt", "zero": true, "rangeMin": 50}
+        },
+        "text": {
+          "field": "lga_name",
+          "type": "nominal"
+        },
+        "color": {
+          "value": "#2c3e50"
+        }
+      }
+    }
+  ]
+}
